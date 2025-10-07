@@ -1,6 +1,8 @@
-# Service: bold-rewards-svc-template
+# Service: [SERVICE NAME]
 
-A NestJS-based microservice template for the BOLD Rewards platform.
+A brief description of the purpose of this microservice.
+
+This is a NestJS-based microservice template for the BOLD Rewards platform.
 
 ## Local Development
 

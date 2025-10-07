@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: nestjs-app:latest # Будет заменено в kustomization
+        image: nestjs-app:latest # Will be replaced in kustomization
         ports:
         - containerPort: 3000
         resources:
