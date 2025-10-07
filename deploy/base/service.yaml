@@ -1,0 +1,12 @@
+# deploy/base/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service # Имя будет дополнено префиксом в kustomization.yaml
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
