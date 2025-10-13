@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-service # Name will be prefixed in kustomization.yaml
+  name: bold-rewards-svc-template # Name will be prefixed in kustomization.yaml
 spec:
   selector:
     app: my-app
