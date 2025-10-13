@@ -56,8 +56,9 @@ Before you begin, ensure you have the following:
 The Kubernetes manifests are in the `deploy/` directory and use Kustomize for environment-specific configurations.
 
 1.  **Update Application Name:**
-    *   In `deploy/base/kustomization.yaml`, change `app: bold-rewards-svc-template` to `app: [YOUR_SERVICE_NAME]` (e.g., `app: user-profile-svc`).
-    *   In `deploy/base/deployment.yaml`, update the `name` metadata to your service name.
+    *   In `deploy/base/kustomization.yaml`, find the `commonLabels` section and change the value of `app` to your service's name (e.g., `app: user-profile-svc`). This name will be used to label all resources.
+    *   In `deploy/base/deployment.yaml`, update the `metadata.name` to match your service name.
+    *   In `deploy/base/service.yaml`, update the `metadata.name` to match your service name.
 
 2.  **Configure Environment Variables:**
     *   Open `deploy/overlays/dev/config.yaml`.
