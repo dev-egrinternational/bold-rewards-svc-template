@@ -1,6 +1,17 @@
 # BOLD Rewards Microservice Template (NestJS)
 
-This repository is a template for creating backend microservices for the BOLD Rewards platform. It includes a pre-configured NestJS application, Dockerfile for containerization, and a fully automated CI/CD pipeline for deploying to a Kubernetes cluster on AWS.
+This repository is a template for creating backend microservices for the BOLD Rewards platform.
+
+---
+
+## Step 0: Creating Your Service Repository
+
+1.  **Navigate to this template repository** on GitHub.
+2.  Click the green **"Use this template"** button and select **"Create a new repository"**.
+3.  Name your new repository** according to the service you are building (e.g., `bold-rewards-svc-user-profile`, `bold-rewards-svc-products`).
+4.  **Clone your new repository** to your local machine. Now you are ready for the one-time setup.
+
+---
 
 ## The Automated Workflow
 
@@ -42,16 +53,16 @@ In your new repository's settings on GitHub (`Settings` > `Secrets and variables
 Before your first deployment, you must give your service a unique name. This requires replacing the placeholder `bold-rewards-svc-template` with your actual service name (e.g., `rewards-svc`) in the following **four** files:
 
 1.  `deploy/base/kustomization.yaml`
-    *   **Change:** `app: bold-rewards-svc-template` -> `app: [YOUR_SERVICE_NAME]`
+    *   **Change:** `app: bold-rewards-svc-template` -> `app: bold-rewards-svc-[YOUR_SERVICE_NAME]`
 
 2.  `deploy/base/deployment.yaml`
-    *   **Change:** `name: bold-rewards-svc-template` -> `name: [YOUR_SERVICE_NAME]`
+    *   **Change:** `name: bold-rewards-svc-template` -> `name: bold-rewards-svc-[YOUR_SERVICE_NAME]`
 
 3.  `deploy/base/service.yaml`
-    *   **Change:** `name: bold-rewards-svc-template` -> `name: [YOUR_SERVICE_NAME]`
+    *   **Change:** `name: bold-rewards-svc-template` -> `name: bold-rewards-svc-[YOUR_SERVICE_NAME]`
 
 4.  `deploy/overlays/dev/patch-deployment.yaml`
-    *   **Change:** `name: bold-rewards-svc-template` -> `name: [YOUR_SERVICE_NAME]`
+    *   **Change:** `name: bold-rewards-svc-template` -> `name: bold-rewards-svc-[YOUR_SERVICE_NAME]`
 
 After making these changes, commit and push them to your `main` branch to trigger the first deployment.
 
