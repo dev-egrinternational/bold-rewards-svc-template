@@ -40,17 +40,19 @@ Before you can use the automated workflow, a few things need to be configured on
 
 ### 2. GitHub Secrets
 
-In your new repository's settings on GitHub (`Settings` > `Secrets and variables` > `Actions`), you must create the following secrets. The CI/CD pipeline uses these to securely connect to your AWS account.
+Navigate to your new repository's settings on GitHub: `Settings` > `Secrets and variables` > `Actions`.
+
+Here, you must create secrets under the **Repository secrets** section. The CI/CD pipeline uses these to securely connect to your AWS account.
 
 *   `AWS_ACCESS_KEY_ID`: Your AWS access key.
 *   `AWS_SECRET_ACCESS_KEY`: Your AWS secret key.
+*   `ECR_REPOSITORY`: The name of the ECR repository you created via Terraform (e.g., `bold-rewards-svc-rewards`).
 *   `EKS_CLUSTER_REGION`: The AWS region where your EKS cluster is located (e.g., `us-east-1`).
-*   `EKS_CLUSTER_NAME`: The name of your EKS cluster.
-*   `ECR_REPOSITORY`: The name of the Amazon ECR repository you created.
+*   `EKS_CLUSTER_NAME`: The name of your EKS cluster. For the `dev` environment, this is `bold-rewards-eks-dev`.
 
 ### 3. Service Configuration
 
-Before your first deployment, you must give your service a unique name. This requires replacing the placeholder `bold-rewards-svc-template` with your actual service name (e.g., `rewards-svc`) in the following **four** files:
+Before your first deployment, you must give your service a unique name. This requires replacing the placeholder `bold-rewards-svc-template` with your actual service name (e.g., `bold-rewards-svc-rewards`) in the following **four** files:
 
 1.  `deploy/base/kustomization.yaml`
     *   **Change:** `app: bold-rewards-svc-template` -> `app: bold-rewards-svc-[YOUR_SERVICE_NAME]`
