@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Inherit from the base kustomization
+resources:
+  - ../../base
+
+# Add a prefix to all resource names to distinguish them in the cluster
+namePrefix: dev-
+
+# You can also patch deployments, for example, to change the number of replicas
+# patchesStrategicMerge:
+#   - patch-deployment.yaml
