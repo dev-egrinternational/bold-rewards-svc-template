@@ -4,6 +4,7 @@ kind: Service
 metadata:
   name: bold-rewards-svc-template # Name will be prefixed in kustomization.yaml
   annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
     service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: /health
 spec:
   type: LoadBalancer
