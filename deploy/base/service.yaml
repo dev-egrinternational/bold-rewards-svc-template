@@ -4,6 +4,7 @@ kind: Service
 metadata:
   name: bold-rewards-svc-template # Name will be prefixed in kustomization.yaml
 spec:
+  type: LoadBalancer
   selector:
     app: my-app
   ports:
