@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bold-rewards-svc-template # Имя будет дополнено префиксом в kustomization.yaml
+  name: bold-rewards-svc-template 
 spec:
   replicas: 1
   selector:
