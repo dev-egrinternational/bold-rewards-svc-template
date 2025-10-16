@@ -7,15 +7,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: my-app
+      app: bold-rewards-svc-template
   template:
     metadata:
       labels:
-        app: my-app
+        app: bold-rewards-svc-template
     spec:
       containers:
       - name: app
-        image: nestjs-app:latest # Will be replaced in kustomization
+        image: placeholder-image # Will be replaced by kustomize in CI/CD
         ports:
         - containerPort: 3000
         resources:

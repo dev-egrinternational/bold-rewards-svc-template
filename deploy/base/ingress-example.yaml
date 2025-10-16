@@ -1,0 +1,42 @@
+# ПРИМЕР: Application Load Balancer через Ingress
+# Этот файл НЕ включен в kustomization.yaml по умолчанию
+# Используйте его вместо Service type: LoadBalancer для более продвинутых сценариев
+# 
+# Преимущества ALB:
+# - Маршрутизация на основе path (/api, /admin)
+# - Поддержка SSL/TLS termination
+# - Поддержка WebSockets
+# - HTTP/2 и gRPC
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bold-rewards-svc-template-ingress
+  annotations:
+    # AWS Load Balancer Controller annotations for ALB
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
+    
+    # Опционально: SSL/HTTPS (раскомментируйте и добавьте ARN сертификата)
+    # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:YOUR_ACCOUNT:certificate/YOUR_CERT_ID
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    # alb.ingress.kubernetes.io/ssl-redirect: '443'
+    
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bold-rewards-svc-template
+                port:
+                  number: 80
+
