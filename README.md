@@ -47,7 +47,7 @@ Here, you must create secrets under the **Repository secrets** section. The CI/C
 *   `AWS_ACCESS_KEY_ID`: Your AWS access key.
 *   `AWS_SECRET_ACCESS_KEY`: Your AWS secret key.
 *   `ECR_REPOSITORY`: The name of the ECR repository you created via Terraform (e.g., `bold-rewards-svc-rewards`).
-*   `EKS_CLUSTER_REGION`: The AWS region where your EKS cluster is located (e.g., `us-east-1`).
+*   `EKS_CLUSTER_REGION`: The AWS region where your EKS cluster is located (e.g., `us-east-2`).
 *   `EKS_CLUSTER_NAME`: The name of your EKS cluster. For the `dev` environment, this is `bold-rewards-eks-dev`.
 
 ### 3. Service Configuration

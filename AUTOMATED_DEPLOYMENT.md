@@ -36,7 +36,7 @@ Add these 5 secrets:
 |------------|--------|-----------------|
 | `AWS_ACCESS_KEY_ID` | Your AWS Access Key | IAM → Users → Create Access Key |
 | `AWS_SECRET_ACCESS_KEY` | Your AWS Secret Key | IAM → Users → Create Access Key |
-| `EKS_CLUSTER_REGION` | `us-east-1` | From your Terraform |
+| `EKS_CLUSTER_REGION` | `us-east-2` | From your Terraform |
 | `EKS_CLUSTER_NAME` | `bold-rewards-eks-dev` | From Terraform output |
 | `ECR_REPOSITORY` | `bold-rewards-svc-rewards` | From Terraform 04-services |
 
@@ -58,7 +58,7 @@ The IAM user needs access to Kubernetes. Run this **once**:
 
 ```bash
 # Update kubeconfig
-aws eks update-kubeconfig --name bold-rewards-eks-dev --region us-east-1
+aws eks update-kubeconfig --name bold-rewards-eks-dev --region us-east-2
 
 # Edit aws-auth ConfigMap
 kubectl edit configmap aws-auth -n kube-system

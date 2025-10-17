@@ -71,7 +71,7 @@ terraform output
 
 # You'll need:
 # - cluster_name (e.g., bold-rewards-eks-dev)
-# - AWS region (us-east-1)
+# - AWS region (us-east-2)
 
 cd ../04-services
 terraform output
@@ -93,7 +93,7 @@ Add these secrets:
 |-------------|-------|---------|
 | `AWS_ACCESS_KEY_ID` | From Step 1 | `AKIAIOSFODNN7EXAMPLE` |
 | `AWS_SECRET_ACCESS_KEY` | From Step 1 | `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY` |
-| `EKS_CLUSTER_REGION` | AWS Region | `us-east-1` |
+| `EKS_CLUSTER_REGION` | AWS Region | `us-east-2` |
 | `EKS_CLUSTER_NAME` | Cluster name | `bold-rewards-eks-dev` |
 | `ECR_REPOSITORY` | Repository name | `bold-rewards-svc-template` |
 
@@ -121,7 +121,7 @@ The IAM user needs these additional permissions to deploy to EKS:
 
 ```bash
 # On your local machine with admin access to EKS
-aws eks update-kubeconfig --name bold-rewards-eks-dev --region us-east-1
+aws eks update-kubeconfig --name bold-rewards-eks-dev --region us-east-2
 
 # Edit aws-auth ConfigMap
 kubectl edit configmap aws-auth -n kube-system
@@ -150,8 +150,8 @@ Watch the GitHub Actions tab to see the pipeline run.
 
 ```bash
 # Build and push Docker image
-docker build -t $(aws sts get-caller-identity --query Account --output text).dkr.ecr.us-east-1.amazonaws.com/bold-rewards-svc-template:latest .
-docker push $(aws sts get-caller-identity --query Account --output text).dkr.ecr.us-east-1.amazonaws.com/bold-rewards-svc-template:latest
+docker build -t $(aws sts get-caller-identity --query Account --output text).dkr.ecr.us-east-2.amazonaws.com/bold-rewards-svc-template:latest .
+docker push $(aws sts get-caller-identity --query Account --output text).dkr.ecr.us-east-2.amazonaws.com/bold-rewards-svc-template:latest
 
 # Deploy to Kubernetes
 kubectl apply -k deploy/overlays/dev
@@ -214,7 +214,7 @@ kubectl logs -n kube-system -l app.kubernetes.io/name=aws-load-balancer-controll
 **Solution**: 
 ```bash
 # Test credentials locally
-aws ecr get-login-password --region us-east-1
+aws ecr get-login-password --region us-east-2
 
 # Verify IAM permissions
 aws iam list-attached-user-policies --user-name github-actions-deployer

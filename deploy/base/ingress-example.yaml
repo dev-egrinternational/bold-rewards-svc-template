@@ -23,7 +23,7 @@ metadata:
     alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
     
     # Опционально: SSL/HTTPS (раскомментируйте и добавьте ARN сертификата)
-    # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:YOUR_ACCOUNT:certificate/YOUR_CERT_ID
+    # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:YOUR_ACCOUNT:certificate/YOUR_CERT_ID
     # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     # alb.ingress.kubernetes.io/ssl-redirect: '443'
     
