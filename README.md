@@ -1,97 +1,108 @@
-# BOLD Rewards Microservice Template (NestJS)
+# BOLD Rewards Service: [YOUR_SERVICE_NAME]
 
-This repository is a template for creating backend microservices for the BOLD Rewards platform.
+This repository is a template for creating backend microservices for the BOLD Rewards platform. It is built with NestJS and is designed for automated deployment to AWS EKS.
 
----
-
-## Step 0: Creating Your Service Repository
-
-1.  **Navigate to this template repository** on GitHub.
-2.  Click the green **"Use this template"** button and select **"Create a new repository"**.
-3.  Name your new repository** according to the service you are building (e.g., `bold-rewards-svc-user-profile`, `bold-rewards-svc-products`).
-4.  **Clone your new repository** to your local machine. Now you are ready for the one-time setup.
+## Table of Contents
+- [Local Development](#local-development)
+- [The Automated Workflow](#the-automated-workflow)
+- [One-Time Setup](#one-time-setup)
+- [Deployment & Verification](#deployment--verification)
+- [Contributing](#contributing)
 
 ---
-
-## The Automated Workflow
-
-This template is designed for a hands-off deployment process:
-
-1.  **Develop:** You write your service's business logic and push your code to the `main` branch.
-2.  **CI/CD Pipeline Runs:** A GitHub Action automatically triggers.
-    *   It runs all tests to ensure code quality.
-    *   It builds a Docker image of your application.
-    *   It pushes the image to your private Amazon ECR repository.
-    *   It updates the Kubernetes deployment configuration with the new image.
-    *   It applies the changes to your EKS cluster, deploying the new version of your service.
-
-**The result: you push code, and it gets deployed. No manual Docker or `kubectl` commands are needed.**
-
----
-
-## Getting Started: One-Time Setup
-
-Before you can use the automated workflow, a few things need to be configured once.
-
-### 1. Infrastructure Prerequisites
-
-*   **Core AWS Infrastructure:** The core infrastructure from the `bold-rewards-iac-aws` repository must be deployed (at least up to the `03-compute` layer to have an EKS cluster).
-*   **Amazon ECR Repository:** Your service needs a dedicated ECR repository. This is created automatically using Terraform in the `bold-rewards-iac-aws` repository. Before proceeding, please follow the instructions in that repository's `README.md` (in the "Step 3: Provisioning Resources for a New Microservice" section) to create the ECR repository for your service.
-
-### 2. GitHub Secrets
-
-Navigate to your new repository's settings on GitHub: `Settings` > `Secrets and variables` > `Actions`.
-
-Here, you must create secrets under the **Repository secrets** section. The CI/CD pipeline uses these to securely connect to your AWS account.
-
-*   `AWS_ACCESS_KEY_ID`: Your AWS access key.
-*   `AWS_SECRET_ACCESS_KEY`: Your AWS secret key.
-*   `ECR_REPOSITORY`: The name of the ECR repository you created via Terraform (e.g., `bold-rewards-svc-rewards`).
-*   `EKS_CLUSTER_REGION`: The AWS region where your EKS cluster is located (e.g., `us-east-2`).
-*   `EKS_CLUSTER_NAME`: The name of your EKS cluster. For the `dev` environment, this is `bold-rewards-eks-dev`.
-
-### 3. Service Configuration
-
-Before your first deployment, you must give your service a unique name. This requires replacing the placeholder `bold-rewards-svc-template` with your actual service name (e.g., `bold-rewards-svc-rewards`) in the following **four** files:
-
-1.  `deploy/base/kustomization.yaml`
-    *   **Change:** `app: bold-rewards-svc-template` -> `app: bold-rewards-svc-[YOUR_SERVICE_NAME]`
-
-2.  `deploy/base/deployment.yaml`
-    *   **Change:** `name: bold-rewards-svc-template` -> `name: bold-rewards-svc-[YOUR_SERVICE_NAME]`
-
-3.  `deploy/base/service.yaml`
-    *   **Change:** `name: bold-rewards-svc-template` -> `name: bold-rewards-svc-[YOUR_SERVICE_NAME]`
-
-4.  `deploy/overlays/dev/patch-deployment.yaml`
-    *   **Change:** `name: bold-rewards-svc-template` -> `name: bold-rewards-svc-[YOUR_SERVICE_NAME]`
-
-After making these changes, commit and push them to your `main` branch to trigger the first deployment.
 
 ## Local Development
 
-While deployment is automated, you will still develop and test on your local machine.
+To run and test the service on your local machine:
 
 1.  **Install dependencies:**
     ```bash
     npm install
     ```
-2.  **Run the service locally:**
+2.  **Run the service:**
     ```bash
     npm run start:dev
     ```
-3.  The service will be available at `http://localhost:3000`.
+The service will be available at `http://localhost:3000`.
 
-## Verifying Deployment
+---
 
-After you push to `main`, you can watch the progress in the "Actions" tab of your GitHub repository. Once the pipeline succeeds, you can verify the deployment in AWS or via `kubectl` if you have it configured locally.
+## The Automated Workflow
 
-*   **Check running pods:**
+This repository is configured for a fully automated, hands-off deployment process.
+
+1.  **Develop:** You write your service's business logic.
+2.  **Push:** You push your code to the `dev` or `qa` branch.
+3.  **CI/CD Pipeline Runs:** A GitHub Action automatically triggers, which:
+    *   Builds a Docker image of your application.
+    *   Pushes the image to a private Amazon ECR repository.
+    *   Deploys the new version to the corresponding EKS cluster.
+
+**The result: you push code, and it gets deployed. No manual Docker or `kubectl` commands are needed.**
+
+---
+
+## One-Time Setup
+
+Before the first deployment of a **new service**, you must give it a unique name. This requires replacing the placeholder `bold-rewards-svc-template` with your actual service name (e.g., `bold-rewards-svc-new-service`) in the following **four** files:
+
+1.  `deploy/base/kustomization.yaml`:
+    *   Change: `app: bold-rewards-svc-template` -> `app: bold-rewards-svc-[YOUR_SERVICE_NAME]`
+2.  `deploy/base/deployment.yaml`:
+    *   Change: `name: bold-rewards-svc-template` -> `name: bold-rewards-svc-[YOUR_SERVICE_NAME]`
+3.  `deploy/base/service.yaml`:
+    *   Change: `name: bold-rewards-svc-template` -> `name: bold-rewards-svc-[YOUR_SERVICE_NAME]`
+4.  `deploy/overlays/dev/patch-deployment.yaml`:
+    *   Change: `name: bold-rewards-svc-template` -> `name: bold-rewards-svc-[YOUR_SERVICE_NAME]`
+
+After making these changes, commit them to your repository.
+
+---
+
+## Deployment & Verification
+
+Deployment is triggered automatically by pushing to a deployment branch (`dev` or `qa`).
+
+You can monitor the progress in the "Actions" tab of your GitHub repository. Once the pipeline succeeds, you can verify the deployment using `kubectl`.
+
+**Useful Commands:**
+
+-   **Check running pods:**
     ```bash
-    kubectl get pods
+    kubectl get pods -l app=bold-rewards-svc-[YOUR_SERVICE_NAME]
     ```
-*   **Access your service (for testing):**
+-   **Check deployment status:**
     ```bash
-    kubectl port-forward service/your-service-name 8080:3000
+    kubectl rollout status deployment/bold-rewards-svc-[YOUR_SERVICE_NAME]
     ```
-    Your service will be accessible at `http://localhost:8080`.
+-   **View logs:**
+    ```bash
+    kubectl logs -f deployment/bold-rewards-svc-[YOUR_SERVICE_NAME]
+    ```
+-   **Get Load Balancer URL (to access the service):**
+    ```bash
+    kubectl get svc bold-rewards-svc-[YOUR_SERVICE_NAME]
+    ```
+
+---
+
+## Contributing
+
+We welcome contributions! Please follow our contribution guidelines.
+
+### Workflow
+
+1.  **Fork the repository.**
+2.  **Create a new branch** for your changes (e.g., `feature/add-new-endpoint`).
+3.  **Make your changes** and commit them using the Conventional Commits standard.
+4.  **Push your changes** to your fork.
+5.  **Create a Pull Request** to the main repository.
+
+### Commit Message Style (Conventional Commits)
+
+We use the [Conventional Commits](https://www.conventionalcommits.org/) standard.
+
+**Format:** `<type>(<scope>): <description>`
+
+-   **Main types:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`.
+-   **Example:** `feat(api): add user profile endpoint`
