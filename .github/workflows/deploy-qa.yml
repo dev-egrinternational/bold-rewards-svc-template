@@ -1,0 +1,56 @@
+name: Deploy qa to EKS
+
+on:
+  push:
+    branches: [ "qa" ]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  SERVICE_NAME: bold-rewards-svc-template
+  K8S_DEPLOYMENT_NAME: qa-bold-rewards-svc-template
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (assume deploy role)
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/gha-deploy-backend-qa
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/${{ env.SERVICE_NAME }}:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/${{ env.SERVICE_NAME }}:$IMAGE_TAG
+
+      - name: Login to EKS
+        run: |
+          aws eks update-kubeconfig --name bold-rewards-eks-qa --region ${{ env.AWS_REGION }}
+
+      - name: Ensure Kubernetes resources exist (create if missing)
+        run: |
+          kubectl get deploy/${{ env.K8S_DEPLOYMENT_NAME }} >/dev/null 2>&1 || kubectl apply -k deploy/overlays/qa
+
+      - name: Update deployment image and rollout
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          kubectl set image deployment/${{ env.K8S_DEPLOYMENT_NAME }} app=$ECR_REGISTRY/${{ env.SERVICE_NAME }}:$IMAGE_TAG
+          kubectl rollout status deployment/${{ env.K8S_DEPLOYMENT_NAME }}
